@@ -6,19 +6,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static jakarta.persistence.FetchType.EAGER;
 
 @Entity
 @Table(name = "book")
 @NoArgsConstructor
 @Getter @Setter
 public class Book {
-
-    public Book(String title, String author, Integer availableStocks) {
-        this.title = title;
-        this.author = author;
-        this.availableStocks = availableStocks;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,9 +25,18 @@ public class Book {
     private String title;
     private String author;
     private Integer availableStocks;
-    private List<SpecificBook> specificBookList;
+
+    @OneToMany(mappedBy = "book", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH},
+            orphanRemoval = true)
+    private List<SpecificBook> specificBooks = new ArrayList<>();
 
     public void addSpecificBook(SpecificBook specificBook){
-        this.specificBookList.add(specificBook);
+        this.specificBooks.add(specificBook);
+    }
+
+    public Book(String title, String author, Integer availableStocks) {
+        this.title = title;
+        this.author = author;
+        this.availableStocks = availableStocks;
     }
 }

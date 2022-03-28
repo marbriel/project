@@ -6,7 +6,6 @@ import lombok.Getter;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
-import java.util.Optional;
 
 @Entity
 @Table(name = "transaction")

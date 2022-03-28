@@ -23,8 +23,17 @@ public class SpecificBook {
     @Column(columnDefinition = "boolean default false")
     private Boolean isBorrowed;
 
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "book_id")
+    private Book book;
+
 
     public void setSpecificBookCode() {
         this.specificBookCode = UUID.randomUUID().toString();
+    }
+
+    public SpecificBook(String specificBookCode, Boolean isBorrowed) {
+        this.specificBookCode = specificBookCode;
+        this.isBorrowed = isBorrowed;
     }
 }

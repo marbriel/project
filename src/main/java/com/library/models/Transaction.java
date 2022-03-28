@@ -4,6 +4,7 @@ import com.library.utils.CalendarUtils;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
@@ -19,8 +20,6 @@ public class Transaction {
     @Column(name = "id", nullable = false)
     private String id;
 
-
-
     private Date dateBorrowed;
     private Date dateExpectedReturn;
 
@@ -33,6 +32,7 @@ public class Transaction {
     private Borrower borrower;
 
     @Column(columnDefinition = "boolean default false")
+    @Setter
     private Boolean isTransactionDone;
 
     public Transaction(SpecificBook specificBook, Borrower borrower) {

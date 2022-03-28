@@ -1,17 +1,13 @@
 package com.library.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "borrower")
 @NoArgsConstructor
 @Getter @Setter
 public class Borrower {
-
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,5 +28,17 @@ public class Borrower {
         this.address = address;
         this.contactNumber = contactNumber;
         this.emailAddress = emailAddress;
+    }
+
+    @Override
+    public String toString() {
+        return "Borrower{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", address='" + address + '\'' +
+                ", contactNumber='" + contactNumber + '\'' +
+                ", emailAddress='" + emailAddress + '\'' +
+                '}';
     }
 }

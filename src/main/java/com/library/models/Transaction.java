@@ -22,6 +22,8 @@ public class Transaction {
 
     private Date dateBorrowed;
     private Date dateExpectedReturn;
+    private Date dateBookWasReturn;
+    private String status;
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, orphanRemoval = true)
     @JoinColumn(name = "specific_book_id")
@@ -59,5 +61,20 @@ public class Transaction {
     public void setDateExpectedReturn(int days){
         this.dateExpectedReturn = CalendarUtils.expectedDateReturn(days);
     }
+
+    public void setDateBookWasReturn(){
+        this.dateBookWasReturn = CalendarUtils.getCurrentDate();
+    }
+
+    public void setStatus(Date expectedDateReturn){
+        if(CalendarUtils.getCurrentDate().before(expectedDateReturn)) {
+            this.status = "ON TIME";
+        }else {
+            this.status = "LATE";
+        }
+    }
+
+
+
 
 }

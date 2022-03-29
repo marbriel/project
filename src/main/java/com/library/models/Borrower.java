@@ -7,6 +7,8 @@ import lombok.*;
 @Table(name = "borrower")
 @NoArgsConstructor
 @Getter @Setter
+@Builder
+@AllArgsConstructor
 public class Borrower {
 
     @Id
@@ -21,13 +23,15 @@ public class Borrower {
     private String contactNumber;
     @Column(unique = true)
     private String emailAddress;
+    private String password;
 
-    public Borrower(String firstName, String lastName, String address, String contactNumber, String emailAddress) {
+    public Borrower(String firstName, String lastName, String address, String contactNumber, String emailAddress, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.contactNumber = contactNumber;
         this.emailAddress = emailAddress;
+        this.password = password;
     }
 
     @Override
@@ -39,6 +43,7 @@ public class Borrower {
                 ", address='" + address + '\'' +
                 ", contactNumber='" + contactNumber + '\'' +
                 ", emailAddress='" + emailAddress + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 }

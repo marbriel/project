@@ -33,12 +33,4 @@ public class ProjectApplication{
 		SpringApplication.run(ProjectApplication.class, args);
 	}
 
-	@Bean
-	CommandLineRunner commandLineRunner(BorrowerService service){
-		return args -> {
-			service.deleteBorrowerById(1L);
-			service.retrieveAllBorrower()
-					.ifPresent(borrowers -> borrowers.forEach(System.out::println));
-		};
-	}
 }

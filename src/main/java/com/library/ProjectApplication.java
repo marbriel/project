@@ -1,5 +1,6 @@
 package com.library;
 
+import com.library.DAO.SpecificBookDAO;
 import com.library.models.Book;
 import com.library.models.Borrower;
 import com.library.models.SpecificBook;
@@ -8,6 +9,7 @@ import com.library.repositories.BookRepository;
 import com.library.repositories.BorrowerRepository;
 import com.library.repositories.SpecificBookRepository;
 import com.library.repositories.TransactionRepository;
+import com.library.services.implementation.BookService;
 import com.library.services.implementation.BorrowerService;
 import com.library.services.implementation.SpecificBookService;
 import com.library.utils.BorrowerNotFoundException;
@@ -31,6 +33,15 @@ import java.util.TimeZone;
 public class ProjectApplication{
 	public static void main(String[] args) {
 		SpringApplication.run(ProjectApplication.class, args);
+	}
+
+
+	@Bean
+	CommandLineRunner commandLineRunner(SpecificBookService service){
+		return args -> {
+			Optional<SpecificBookDAO> dao = service.getSpecificBookByCode("744af587-0ae9-4ce4-9a81-d5c4c5055f63");
+			System.out.println(dao.toString());
+		};
 	}
 
 }

@@ -1,9 +1,7 @@
 package com.library.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -11,6 +9,8 @@ import java.util.UUID;
 @Table(name = "specific_book")
 @NoArgsConstructor
 @Getter @Setter
+@AllArgsConstructor
+@Builder
 public class SpecificBook {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

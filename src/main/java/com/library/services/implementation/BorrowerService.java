@@ -6,6 +6,7 @@ import com.library.repositories.BorrowerRepository;
 import com.library.services.IService.IBorrower;
 import com.library.utils.BorrowerNotFoundException;
 import com.library.utils.StringManipulator;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,14 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-public record BorrowerService(BorrowerRepository borrowerRepository) implements IBorrower {
+@Transactional
+public class BorrowerService implements IBorrower {
+
+    private final BorrowerRepository borrowerRepository;
+
+    public BorrowerService(BorrowerRepository borrowerRepository) {
+        this.borrowerRepository = borrowerRepository;
+    }
 
     @Override
     public Optional<List<Borrower>> retrieveAllBorrower() throws BorrowerNotFoundException {

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
 
 @Service
 @Slf4j
@@ -44,7 +44,7 @@ public class SpecificBookService implements ISpecificBook {
 
     @Override
     public Optional<SpecificBook> getASpecificBook(Long id) {
-        return Optional.empty();
+        return Optional.ofNullable(repository.findById(id).orElseThrow(null));
     }
 
     @Override
@@ -62,16 +62,28 @@ public class SpecificBookService implements ISpecificBook {
     }
 
     @Override
-    public void saveABook(Long bookId, SpecificBook specificBook) {
+    public void saveASpecificBook(Long bookId) {
+        SpecificBook specificBook = new SpecificBook();
         Book book = bookService.getBookById(bookId).orElseThrow(null);
         specificBook.setBook(book);
+        specificBook.setSpecificBookCode();
+        specificBook.setIsBorrowed(false);
         book.setAvailableStocks(book.getAvailableStocks() + 1);
         book.addSpecificBook(specificBook);
+        log.warn("Saving a book with code of {}", specificBook.getSpecificBookCode());
         repository.save(specificBook);
     }
 
     @Override
-    public void deleteBook(Long id) {
+    public void deleteSpecificBook(Long id) {
+        SpecificBook specificBook = getASpecificBook(id).orElseThrow(null);
+        Book book = specificBook.getBook();
+        if(book.getSpecificBooks().contains(specificBook)){
+            book.getSpecificBooks().remove(specificBook);
+            book.setAvailableStocks(book.getAvailableStocks() - 1);
+            log.warn("Removing specific book from the shelf of {} with code {}", book.getTitle(), specificBook.getSpecificBookCode());
+            repository.delete(specificBook);
+        }
 
     }
 }

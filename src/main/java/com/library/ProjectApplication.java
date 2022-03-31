@@ -29,19 +29,11 @@ import java.util.TimeZone;
 
 @SpringBootApplication
 @Slf4j
-
+@Transactional
 public class ProjectApplication{
 	public static void main(String[] args) {
 		SpringApplication.run(ProjectApplication.class, args);
 	}
-
-
-	@Bean
-	CommandLineRunner commandLineRunner(SpecificBookService service){
-		return args -> {
-			Optional<SpecificBookDAO> dao = service.getSpecificBookByCode("744af587-0ae9-4ce4-9a81-d5c4c5055f63");
-			System.out.println(dao.toString());
-		};
-	}
+	
 
 }

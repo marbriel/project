@@ -11,6 +11,6 @@ public interface ISpecificBook {
     Optional<List<SpecificBook>> getAllSpecificBook(Long bookId);
     Optional<SpecificBook> getASpecificBook(Long id);
     Optional<SpecificBookDAO> getSpecificBookByCode(String code);
-    void saveABook(Long bookId, SpecificBook specificBook);
-    void deleteBook(Long id);
+    void saveASpecificBook(Long bookId);
+    void deleteSpecificBook(Long id);
 }

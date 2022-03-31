@@ -13,7 +13,6 @@ import java.util.Optional;
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, String> {
     Optional<List<Transaction>> findByIsTransactionDoneFalse();
-    Optional<Transaction> findByBorrower(Borrower borrower);
-    Optional<Transaction> findBySpecificBook(SpecificBook specificBook);
-    Optional<Transaction> findByDateExpectedReturn(Date expectedDateReturn);
+    Optional<List<Transaction>> findByBorrower(Borrower borrower);
+    Optional<List<Transaction>> findByDateExpectedReturn(Date expectedDateReturn);
 }

@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "transaction")
@@ -25,9 +27,6 @@ public class Transaction {
     private Date dateBookWasReturn;
     private String status;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, orphanRemoval = true)
-    @JoinColumn(name = "specific_book_id")
-    private SpecificBook specificBook;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "borrower_id")
@@ -37,17 +36,18 @@ public class Transaction {
     @Setter
     private Boolean isTransactionDone;
 
-    public Transaction(SpecificBook specificBook, Borrower borrower) {
-        this.specificBook = specificBook;
-        this.borrower = borrower;
-    }
-
-    public void setBorrower(Borrower borrower) {
-        this.borrower = borrower;
-    }
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "specific_book_id")
+    private SpecificBook specificBook;
 
     public void setSpecificBook(SpecificBook specificBook) {
         this.specificBook = specificBook;
+    }
+
+
+
+    public void setBorrower(Borrower borrower) {
+        this.borrower = borrower;
     }
 
     public void setDateBorrowed(){

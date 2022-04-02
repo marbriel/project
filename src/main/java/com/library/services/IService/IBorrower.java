@@ -9,9 +9,10 @@ import java.util.Optional;
 public interface IBorrower {
 
     Optional<List<Borrower>> retrieveAllBorrower() throws BorrowerNotFoundException;
-    void saveBorrower(Borrower borrower);
+    Optional<Borrower> saveBorrower(Borrower borrower);
     Optional<Borrower> getBorrowerById(Long id);
     Optional<Borrower> getBorrowerByEmail(String email);
-    void deleteBorrowerById(Long borrowerId);
-
+    Optional<Borrower> updateBorrower(Borrower borrower);
+    Optional<Borrower> deleteBorrowerById(Long borrowerId);
+    Optional<Borrower> retrieveAccount(String email);
 }

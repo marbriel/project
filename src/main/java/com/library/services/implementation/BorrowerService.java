@@ -28,7 +28,7 @@ public class BorrowerService implements IBorrower {
 
     @Override
     public Optional<List<Borrower>> retrieveAllBorrower() throws BorrowerNotFoundException {
-        Optional<List<Borrower>> borrowers = Optional.of(borrowerRepository.findAll());
+        Optional<List<Borrower>> borrowers = borrowerRepository.getAllBorrowers();
         borrowers.ifPresentOrElse(ArrayList::new, () -> {
             try {
                 throw new BorrowerNotFoundException("No users found");
@@ -41,7 +41,7 @@ public class BorrowerService implements IBorrower {
     }
 
     @Override
-    public void saveBorrower(Borrower borrower) {
+    public Optional<Borrower> saveBorrower(Borrower borrower) {
         Optional<Borrower> optionalBorrower = Optional.ofNullable(borrower);
 
         optionalBorrower.ifPresent(borrowerInfo -> {
@@ -50,29 +50,53 @@ public class BorrowerService implements IBorrower {
             borrowerInfo.setEmailAddress(borrower.getEmailAddress());
             borrowerInfo.setContactNumber(borrower.getContactNumber());
             borrowerInfo.setAddress(borrower.getAddress());
+            borrowerInfo.setIsDeleted(false);
             log.warn("Saving {} {}", borrowerInfo.getFirstName(), borrowerInfo.getLastName());
             borrowerRepository.saveAndFlush(borrowerInfo);
         });
+        return optionalBorrower;
     }
 
     @Override
     public Optional<Borrower> getBorrowerById(Long id) {
         log.warn("Fetching borrower with id of {}", id);
-        return Optional.ofNullable(borrowerRepository.findById(id).orElseThrow(() -> new BorrowerNotFoundException("No user found")));
+        return Optional.ofNullable(borrowerRepository.findByIdAndIsDeletedFalse(id).orElseThrow(() -> new BorrowerNotFoundException("No user found")));
     }
 
     @Override
     public Optional<Borrower> getBorrowerByEmail(String email) {
         log.warn("Fetching borrower with an email of {}", email);
-        return Optional.ofNullable(borrowerRepository.findByEmailAddress(email)
+        return Optional.ofNullable(borrowerRepository.findByEmailAddressAndIsDeletedFalse(email)
                 .orElseThrow(() -> new BorrowerNotFoundException("No borrower found with email of" + email)));
     }
 
     @Override
-    public void deleteBorrowerById(Long borrowerId) {
+    public Optional<Borrower> updateBorrower(Borrower borrower) {
+        Optional<Borrower> borrowerToUpdate = borrowerRepository.findById(borrower.getId());
+        borrowerToUpdate.ifPresent((updatingBorrower)->{
+            updatingBorrower.setId(borrower.getId());
+            updatingBorrower.setFirstName(StringManipulator.upperEveryStarts(borrower.getFirstName()));
+            updatingBorrower.setLastName(StringManipulator.upperEveryStarts(borrower.getLastName()));
+            updatingBorrower.setAddress(borrower.getAddress());
+            updatingBorrower.setPassword(borrower.getPassword());
+            updatingBorrower.setIsDeleted(borrower.getIsDeleted());
+        });
+        return Optional.of(borrower);
+    }
+
+    @Override
+    public Optional<Borrower> deleteBorrowerById(Long borrowerId) {
         Optional<Borrower> borrowerToDelete = Optional.ofNullable(getBorrowerById(borrowerId))
                 .orElseThrow(() -> new BorrowerNotFoundException("Cannot delete because no borrower found"));
         log.warn("Deleting borrower with an email of {}", borrowerToDelete.map(Borrower::getEmailAddress));
-        borrowerToDelete.ifPresent((borrowerRepository::delete));
+        borrowerToDelete.ifPresent((borrower -> borrower.setIsDeleted(true)));
+        return borrowerToDelete;
+    }
+
+    @Override
+    public Optional<Borrower> retrieveAccount(String email) {
+        Optional<Borrower> borrower = borrowerRepository.findByEmailAddressAndIsDeletedTrue(email);
+        borrower.ifPresent(activateAccount -> activateAccount.setIsDeleted(false));
+        return borrower;
     }
 }

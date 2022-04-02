@@ -50,8 +50,10 @@ public class TransactionService implements ITransaction {
             log.warn("Generating a transaction...... Borrower : {} Book Title {} {}",
                     borrower.getFirstName(), specificBook.getBook().getTitle(), specificBook.getSpecificBookCode());
             transactionRepository.save(transaction);
+        }else{
+            log.warn("You cannot borrow {}  because it is already borrowed", specificBook.getBook().getTitle());
         }
-        log.warn("You cannot borrow {}  because it is already borrowed", specificBook.getBook().getTitle());
+
     }
 
     @Override
@@ -87,8 +89,10 @@ public class TransactionService implements ITransaction {
             transaction.setIsTransactionDone(true);
             transaction.setDateBookWasReturn();
             transaction.setStatus(transaction.getDateExpectedReturn());
+        }else{
+            log.warn("Transaction with with of {} is already marked done", transactionId);
         }
-        log.warn("Transaction with with of {} is already marked done", transactionId);
+
 
     }
 }

@@ -24,14 +24,16 @@ public class Borrower {
     @Column(unique = true)
     private String emailAddress;
     private String password;
+    private Boolean isDeleted;
 
-    public Borrower(String firstName, String lastName, String address, String contactNumber, String emailAddress, String password) {
+    public Borrower(String firstName, String lastName, String address, String contactNumber, String emailAddress, String password, Boolean isDeleted) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.contactNumber = contactNumber;
         this.emailAddress = emailAddress;
         this.password = password;
+        this.isDeleted = isDeleted;
     }
 
     @Override
@@ -44,6 +46,7 @@ public class Borrower {
                 ", contactNumber='" + contactNumber + '\'' +
                 ", emailAddress='" + emailAddress + '\'' +
                 ", password='" + password + '\'' +
+                ", isDeleted=" + isDeleted +
                 '}';
     }
 }
